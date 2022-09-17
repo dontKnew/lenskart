@@ -1,0 +1,18 @@
+echo "<pre>";
+echo print_r($data);
+echo "<pre>";
+
+// $name = "Rahul"; 
+			// $father_name = "Raj Kumar";
+			// $phone_no = 7065221377;
+			
+			// $email = "rahul@gmail.com";
+			// $address = "Kapashear";
+			// $city = "Delhi";
+			
+			// $location = "Kapashera";
+			// $pincode =  110037;
+			// $investment_details = "investment details";
+			
+			// $current_business = "current_business";
+			// $message = "Something new";

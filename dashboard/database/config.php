@@ -33,20 +33,24 @@ class lenskartDB{
     public function insert($table,$params=array())
     {
         if($this->tableExists($table)){
-            $post['post'] = array();
+
             try {
-                $post['post'] = array();
                 $table_key = implode(' , ', array_keys($params));
                 $table_value = implode("', '", $params);
                 $sql = "INSERT INTO $table ($table_key) VALUES ('$table_value')";
-                $this->mysqli->query($sql);
-                $lastId = $this->mysqli->insert_id;
-                array_push($post['post'], array( "message"=>"Data added", "status"=>1, "lastId"=>$lastId)); 
-
+                
+                if($this->mysqli->query($sql)){
+                    return true;
+                }else {
+                    return false;
+                }
+                // $lastId = $this->mysqli->insert_id;
+                // array_push($post['post'], array( "message"=>"Data added", "status"=>1, "lastId"=>$lastId)); 
             }catch(Exception $error){
-                array_push($post['post'], array( "message"=>"Data could not added-Error : $error ", "status"=>0)); 
+                // array_push($post['post'], array( "message"=>"Data could not added-Error : $error ", "status"=>0)); 
+                return false;
             }
-            array_push($this->result, $post);
+            // array_push($this->result, $post);
         }
     }
 
@@ -54,7 +58,6 @@ class lenskartDB{
     public function update($table, $params=array(), $where=null)
     {
         if($this->tableExists($table)){
-            $update['update'] = array();
             try {
                 
                 $args = array();
@@ -66,22 +69,23 @@ class lenskartDB{
                 if($where !=null){
                     $sql .=" WHERE $where"; // continue sql with where using ==> .=
                 }
-                $this->mysqli->query($sql);
-                $affectedRow = $this->mysqli->affected_rows;
-                array_push($update['update'], array( "message"=>"Data updated", "status"=>1, "affectedRows"=>$affectedRow)); 
-
+                if($this->mysqli->query($sql)){
+                    $affectedRow = $this->mysqli->affected_rows;
+                    // array_push($update['update'], array( "message"=>"Data updated", "status"=>1, "affectedRows"=>$affectedRow)); 
+                    return true;
+                }else {
+                    return false;
+                }
             }catch(Exception $error){
-                array_push($update['update'], array( "message"=>"Data could not updated-Error: $error", "status"=>0)); 
+                // array_push($update['update'], array( "message"=>"Data could not updated-Error: $error", "status"=>0)); 
+                return false;
             }
-            
-            array_push($this->result, $update);
         }
     }
 
     public function delete($table, $where=null)
     {
         if($this->tableExists($table))
-        $delete['delete'] = array();
         {
             try {
                 $sql = "DELETE FROM $table";
@@ -91,16 +95,13 @@ class lenskartDB{
                 }
                 $this->mysqli->query($sql);
                 $affectedRow = $this->mysqli->affected_rows;
-                array_push($delete['delete'], array( "message"=>"Data deleted", "status"=>1, "affectedRows"=>$affectedRow)); 
+                return  true; 
 				
-                
             }catch(Exception $error){
-                array_push($delete['delete'], array( "message"=>"Data could not delete-Error: $error", "status"=>0)); 
-				
-				
+                return false;
+			
             }
         }
-        array_push($this->result, $delete);
     }
 
 
